@@ -13,18 +13,25 @@ const navLinks = [
 
 const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
+  const [lastScroll, setLastScroll] = React.useState(0);
 
-  // Effet "compact + shadow" quand on scrolle
+  // Gestion de la visibilité du header selon le scroll
   React.useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 8);
+      const currentScroll = window.scrollY;
+      const isScrollingDown = currentScroll > lastScroll && currentScroll > 80;
+      const isScrollingUp = currentScroll < lastScroll;
+
+      if (isScrollingDown && !hidden) setHidden(true);
+      else if (isScrollingUp && hidden) setHidden(false);
+
+      setLastScroll(currentScroll);
     };
 
-    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScroll, hidden]);
 
   const handleScrollClick =
     (selector: string) =>
@@ -37,86 +44,118 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
   return (
     <header
       className={[
-        "sticky top-0 z-30 transition-all duration-200",
-        "backdrop-blur-xl",
-        "bg-[rgba(245,245,247,0.92)]",
-        scrolled ? "border-b border-[rgba(229,231,235,0.9)] shadow-sm" : "border-b border-transparent",
+        "fixed top-0 z-40 w-full transition-transform duration-300 ease-in-out",
+        hidden ? "-translate-y-full" : "translate-y-0",
       ].join(" ")}
     >
-      <div className="w-full max-w-site mx-auto px-4 sm:px-6">
+      <div className="w-full max-w-site mx-auto px-4 sm:px-6 lg:px-8">
+        {/* barre flottante */}
         <nav
           className={[
-            "flex items-center justify-between gap-4",
-            scrolled ? "py-2.5" : "py-3.5",
-            "transition-[padding] duration-200",
+            "mt-3 mb-3 flex items-center justify-between gap-3",
+            "rounded-2xl border border-slate-200/80 bg-white/90 shadow-sm",
+            "px-4 sm:px-6 py-2 sm:py-2.5",
           ].join(" ")}
         >
-          {/* Logo / marque */}
+          {/* Nom / marque */}
           <button
             type="button"
             onClick={() => scrollTo("top")}
-            className="flex items-center gap-2 rounded-full px-1.5 -ml-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+            className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            <div className="w-8 h-8 rounded-full bg-[radial-gradient(circle_at_30%_20%,#4f46e5,#111827)]" />
             <div className="text-left leading-tight">
-              <div className="font-semibold text-[0.9rem]">
-                Systèmes &amp; Dashboards
+              <div className="font-semibold text-[1rem] text-slate-900 tracking-tight">
+                Gabriel Collot
               </div>
-              <div className="text-[0.75rem] text-text-muted">
-                Automatisation &amp; data
+              <div className="text-[0.72rem] text-slate-500">
+                Automatisation & data
               </div>
             </div>
           </button>
 
-          {/* Desktop nav */}
+          {/* Navigation desktop */}
           <div className="hidden md:flex items-center gap-6 text-[0.9rem]">
-            <div className="flex items-center gap-4 text-text-muted">
+            <div className="flex items-center gap-4 text-slate-500">
               {navLinks.map((link) => (
                 <a
                   key={link.target}
                   href={link.target}
                   onClick={handleScrollClick(link.target)}
-                  className="relative inline-flex items-center py-1 hover:text-text-main transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-accent after:transition-[width] after:duration-150 hover:after:w-full"
+                  className="relative inline-flex items-center py-1 leading-none hover:text-slate-900 transition-colors"
                 >
                   {link.label}
+                  <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-emerald-400 rounded-full transition-[width] duration-150 hover:w-full" />
                 </a>
               ))}
             </div>
+
             <button
               type="button"
               onClick={handleScrollClick("#contact")}
-              className="inline-flex items-center gap-1.5 rounded-full border border-accent bg-accent px-4 py-2 text-[0.85rem] text-slate-50 hover:shadow-sm active:scale-[0.98] transition"
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-4 py-2 text-[0.85rem] font-medium text-slate-950 shadow-sm hover:bg-emerald-400 active:scale-[0.97] transition"
             >
-              <span>Parler de ton système</span>
+              Parler de ton système
             </button>
           </div>
 
-          {/* Mobile nav toggle */}
+          {/* Bouton mobile */}
           <button
             type="button"
-            className="md:hidden inline-flex items-center justify-center rounded-full border border-border bg-white px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+            className="md:hidden inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={mobileOpen}
           >
-            <span className="sr-only">Menu</span>
             <div className="space-y-[3px]">
-              <span className="block w-4 h-[2px] rounded-full bg-accent" />
-              <span className="block w-4 h-[2px] rounded-full bg-accent" />
+              <span
+                className={[
+                  "block h-[2px] w-4 rounded-full bg-slate-900 transition-transform duration-150",
+                  mobileOpen ? "translate-y-[3px] rotate-45" : "",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "block h-[2px] w-4 rounded-full bg-slate-900 transition-transform duration-150",
+                  mobileOpen ? "-translate-y-[3px] -rotate-45" : "",
+                ].join(" ")}
+              />
             </div>
           </button>
         </nav>
+      </div>
 
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-[rgba(248,250,252,0.96)]">
-            <div className="flex flex-col gap-1 py-2 text-sm">
+      {/* Overlay mobile plein écran */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm">
+          <div className="absolute inset-x-4 top-4 rounded-2xl bg-white shadow-lg border border-slate-200 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-left leading-tight">
+                <div className="font-semibold text-[1rem] text-slate-900">
+                  Gabriel Collot
+                </div>
+                <div className="text-[0.72rem] text-slate-500">
+                  Automatisation & data
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-full p-1.5 hover:bg-slate-100"
+                aria-label="Fermer le menu"
+              >
+                <span className="block h-[2px] w-4 rotate-45 rounded-full bg-slate-700" />
+                <span className="block -mt-[2px] h-[2px] w-4 -rotate-45 rounded-full bg-slate-700" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-1 py-1 text-sm">
               {navLinks.map((link) => (
                 <button
                   key={link.target}
                   type="button"
                   onClick={handleScrollClick(link.target)}
-                  className="text-left px-2.5 py-2 rounded-lg hover:bg-slate-100"
+                  className="text-left px-2.5 py-2 rounded-lg hover:bg-slate-100 text-slate-700"
                 >
                   {link.label}
                 </button>
@@ -124,14 +163,14 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
               <button
                 type="button"
                 onClick={handleScrollClick("#contact")}
-                className="mt-1 mx-1 px-4 py-2 rounded-full border border-accent bg-accent text-slate-50 text-[0.85rem] hover:shadow-sm active:scale-[0.98] transition"
+                className="mt-2 w-full px-4 py-2 rounded-full bg-emerald-500 text-slate-950 text-[0.85rem] font-medium hover:bg-emerald-400 active:scale-[0.98] transition"
               >
                 Parler de ton système
               </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 };

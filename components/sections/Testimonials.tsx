@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 interface Testimonial {
@@ -26,42 +28,29 @@ const testimonials: Testimonial[] = [
 
 const TestimonialsSection: React.FC = () => {
   return (
-    <section
-      id="temoignages"
-      className="relative overflow-hidden bg-slate-950 py-20 px-4 sm:px-6 lg:px-8"
-    >
+    <section className="relative overflow-hidden bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
       {/* halo de fond */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.20)_0,_transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25)_0,_transparent_55%)]" />
 
       <div className="relative mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-xs font-medium uppercase tracking-wide text-sky-300 ring-1 ring-sky-500/30">
+        {/* Header minimal */}
+        <div className="mx-auto mb-10 text-center">
+          <span className="inline-flex items-center rounded-full border border-sky-500/40 bg-sky-900/30 px-3 py-1 text-xs font-medium uppercase tracking-wide text-sky-300">
             Social Ads & Data
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-slate-50">
             Ce que disent nos clients
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-400">
-            Des équipes marketing qui pilotent leurs campagnes avec une
-            vision claire, sans Excel infernal ni exports à rallonge.
-          </p>
         </div>
 
         {/* Grid de témoignages */}
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
           {testimonials.map((t, i) => (
             <article
               key={i}
               className="group flex h-full flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.55)] backdrop-blur-md transition duration-200 hover:-translate-y-1.5 hover:border-sky-500/60 hover:shadow-[0_22px_60px_rgba(8,47,73,0.9)]"
             >
               <div className="flex-1">
-                <div className="mb-3 flex items-center gap-1 text-xs text-amber-300">
-                  <span>★★★★★</span>
-                  <span className="ml-1 text-[11px] text-amber-200/80">
-                    Avis vérifié
-                  </span>
-                </div>
                 <p className="text-sm leading-relaxed text-slate-100">
                   <span className="mr-1 text-sky-400/80">“</span>
                   {t.text}
@@ -79,22 +68,13 @@ const TestimonialsSection: React.FC = () => {
                     .join("")}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-50">
-                    {t.name}
-                  </p>
+                  <p className="text-sm font-medium text-slate-50">{t.name}</p>
                   <p className="text-xs text-slate-400">{t.role}</p>
                 </div>
               </div>
             </article>
           ))}
         </div>
-
-        {/* petite note en dessous */}
-        <p className="mt-8 text-center text-xs text-slate-500">
-          Ces résultats dépendent évidemment de vos créas, de vos offres et de
-          votre budget média — notre rôle est de vous donner la meilleure
-          lecture possible de vos performances.
-        </p>
       </div>
     </section>
   );

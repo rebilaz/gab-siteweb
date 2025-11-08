@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
 type ContactProps = {
   onSubmit?: (data: FormData) => void;
@@ -14,8 +16,7 @@ const Contact: React.FC<ContactProps> = ({ onSubmit }) => {
   const [showWhatsAppCTA, setShowWhatsAppCTA] = useState(false);
 
   const handleWhatsApp = () => {
-    const number = "YOUR_NUMBER_HERE"; // ← mets ton numéro au format 33612345678
-
+    const number = "YOUR_NUMBER_HERE"; // format 33612345678
     const message = `
 Salut ! 👋
 
@@ -46,126 +47,107 @@ Est-ce que tu peux me dire si tu vois des choses à simplifier / automatiser ?
       setTeamSize(value);
       setStep(2);
     }
-
     if (question === 2) {
       setMainIssue(value);
       setStep(3);
     }
-
     if (question === 3) {
       setTools(value);
       setShowWhatsAppCTA(true);
     }
   };
 
+  const progress = (step / 3) * 100;
+
+  const goBack = () => {
+    setShowWhatsAppCTA(false);
+    setStep((prev) => Math.max(1, prev - 1));
+  };
+
   return (
     <section
       id="contact"
-      className="py-12 sm:py-14 border-t border-slate-200 bg-slate-50"
+      className="py-14 border-t border-slate-200 bg-slate-50 font-sans"
     >
       <div className="w-full max-w-site mx-auto px-4 sm:px-6 flex flex-col items-center">
-        {/* Titre simple */}
-        <h2 className="mb-6 text-center text-[1.7rem] sm:text-[2rem] font-semibold text-slate-900 tracking-tight">
-          On regarde ton système en quelques clics
-        </h2>
-
-        {/* Carte du quizz */}
-        <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-soft">
-          {/* Progression */}
-          <div className="mb-4 flex items-center justify-between text-[0.8rem] text-text-muted">
-            <span>Question {step} sur 3</span>
-            <div className="flex gap-1.5">
-              {[1, 2, 3].map((s) => (
-                <span
-                  key={s}
-                  className={`h-1.5 w-6 rounded-full transition-all duration-300 ${
-                    s <= step ? "bg-emerald-500" : "bg-slate-200"
-                  }`}
-                />
-              ))}
-            </div>
+        {/* Carte du quiz */}
+        <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white px-5 sm:px-8 py-8 sm:py-10 shadow-lg shadow-slate-200/50">
+          {/* Barre de progression */}
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-200/70 rounded-t-2xl overflow-hidden">
+            <motion.div
+              className="h-full bg-emerald-500 rounded-t-2xl"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
           </div>
 
+          {/* Flèche retour */}
+          {step > 1 && (
+            <button
+              onClick={goBack}
+              className="absolute top-4 left-4 flex items-center gap-1 text-slate-500 hover:text-slate-800 transition"
+            >
+              <ArrowLeft size={18} strokeWidth={2} />
+              <span className="text-[0.85rem] font-medium">Retour</span>
+            </button>
+          )}
+
+          {/* Contenu du quiz */}
           <div
-            className={`
-              rounded-xl border border-slate-200 bg-slate-50/80 p-4 sm:p-5 space-y-4
-              transition-all duration-300
-              ${showWhatsAppCTA ? "shadow-md ring-1 ring-emerald-300/60" : ""}
-            `}
+            className={`mt-2 sm:mt-4 transition-all duration-300 flex flex-col items-center text-center ${
+              showWhatsAppCTA ? "ring-1 ring-emerald-300/60 rounded-2xl" : ""
+            }`}
           >
             {step === 1 && (
               <>
-                <p className="text-[0.8rem] uppercase tracking-[0.14em] text-slate-500">
-                  Étape 1
-                </p>
-                <h3 className="text-[1.02rem] font-semibold text-slate-900">
-                  Quelle est la taille de ton équipe / activité ?
+                <h3 className="text-[1.3rem] sm:text-[1.5rem] font-semibold text-slate-900 mb-6">
+                  Quelle est la taille de ton équipe ?
                 </h3>
-                <div className="mt-3 grid gap-2">
-                  {[
-                    "Je suis solo",
-                    "2–5 personnes",
-                    "6–15 personnes",
-                    "Plus de 15",
-                  ].map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => handleSelect(1, option)}
-                      className={`flex justify-between items-center rounded-lg border px-3 py-2.5 text-left text-[0.9rem] transition-all duration-200 active:scale-[0.99] ${
-                        teamSize === option
-                          ? "border-emerald-500 bg-emerald-50 text-slate-900"
-                          : "border-slate-200 bg-white hover:border-slate-300"
-                      }`}
-                    >
-                      <span>{option}</span>
-                      <span
-                        className={`h-3 w-3 rounded-full border transition-all ${
+                <div className="w-full max-w-md grid gap-4">
+                  {["Je suis solo", "2–5 personnes", "6–15 personnes", "Plus de 15"].map(
+                    (option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => handleSelect(1, option)}
+                        className={`rounded-xl border px-5 py-4 sm:py-5 text-[1rem] sm:text-[1.05rem] font-medium transition-all duration-200 active:scale-[0.98] ${
                           teamSize === option
-                            ? "border-emerald-500 bg-emerald-500"
-                            : "border-slate-300 bg-white"
+                            ? "border-emerald-500 bg-emerald-50 text-slate-900 shadow-sm"
+                            : "border-slate-200 bg-white hover:border-slate-300"
                         }`}
-                      />
-                    </button>
-                  ))}
+                      >
+                        {option}
+                      </button>
+                    )
+                  )}
                 </div>
               </>
             )}
 
             {step === 2 && (
               <>
-                <p className="text-[0.8rem] uppercase tracking-[0.14em] text-slate-500">
-                  Étape 2
-                </p>
-                <h3 className="text-[1.02rem] font-semibold text-slate-900">
-                  Où est-ce que tu perds le plus de temps aujourd’hui ?
+                <h3 className="text-[1.3rem] sm:text-[1.5rem] font-semibold text-slate-900 mb-6">
+                  Où perds-tu le plus de temps aujourd’hui ?
                 </h3>
-                <div className="mt-3 grid gap-2">
+                <div className="w-full max-w-md grid gap-4">
                   {[
                     "Suivi des demandes / leads",
                     "Relances clients / factures",
                     "Organisation interne / tâches",
                     "Reporting / chiffres",
-                    "Autre",
                   ].map((option) => (
                     <button
                       key={option}
                       type="button"
                       onClick={() => handleSelect(2, option)}
-                      className={`flex justify-between items-center rounded-lg border px-3 py-2.5 text-left text-[0.9rem] transition-all duration-200 active:scale-[0.99] ${
+                      className={`rounded-xl border px-5 py-4 sm:py-5 text-[1rem] sm:text-[1.05rem] font-medium transition-all duration-200 active:scale-[0.98] ${
                         mainIssue === option
-                          ? "border-emerald-500 bg-emerald-50 text-slate-900"
+                          ? "border-emerald-500 bg-emerald-50 text-slate-900 shadow-sm"
                           : "border-slate-200 bg-white hover:border-slate-300"
                       }`}
                     >
-                      <span>{option}</span>
-                      <span
-                        className={`h-3 w-3 rounded-full border transition-all ${
-                          mainIssue === option
-                            ? "border-emerald-500 bg-emerald-500"
-                            : "border-slate-300 bg-white"
-                        }`}
-                      />
+                      {option}
                     </button>
                   ))}
                 </div>
@@ -174,83 +156,50 @@ Est-ce que tu peux me dire si tu vois des choses à simplifier / automatiser ?
 
             {step === 3 && (
               <>
-                <p className="text-[0.8rem] uppercase tracking-[0.14em] text-slate-500">
-                  Étape 3
-                </p>
-                <h3 className="text-[1.02rem] font-semibold text-slate-900">
-                  Quels outils utilises-tu le plus au quotidien ?
+                <h3 className="text-[1.3rem] sm:text-[1.5rem] font-semibold text-slate-900 mb-6">
+                  Quels outils utilises-tu le plus ?
                 </h3>
-
                 {!showWhatsAppCTA && (
-                  <div className="mt-3 grid gap-2">
+                  <div className="w-full max-w-md grid gap-4">
                     {[
                       "Notion",
                       "Airtable",
                       "Google Sheets / Excel",
-                      "CRM (HubSpot, Pipedrive…)",
-                      "Autre / mélange de tout",
+                      "CRM / Autre mélange",
                     ].map((option) => (
                       <button
                         key={option}
                         type="button"
                         onClick={() => handleSelect(3, option)}
-                        className={`flex justify-between items-center rounded-lg border px-3 py-2.5 text-left text-[0.9rem] transition-all duration-200 active:scale-[0.99] ${
+                        className={`rounded-xl border px-5 py-4 sm:py-5 text-[1rem] sm:text-[1.05rem] font-medium transition-all duration-200 active:scale-[0.98] ${
                           tools === option
-                            ? "border-emerald-500 bg-emerald-50 text-slate-900"
+                            ? "border-emerald-500 bg-emerald-50 text-slate-900 shadow-sm"
                             : "border-slate-200 bg-white hover:border-slate-300"
                         }`}
                       >
-                        <span>{option}</span>
-                        <span
-                          className={`h-3 w-3 rounded-full border transition-all ${
-                            tools === option
-                              ? "border-emerald-500 bg-emerald-500"
-                              : "border-slate-300 bg-white"
-                          }`}
-                        />
+                        {option}
                       </button>
                     ))}
                   </div>
                 )}
-
                 {showWhatsAppCTA && (
-                  <div className="mt-5 animate-[fadeIn_0.22s_ease-out]">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-8 w-full max-w-md"
+                  >
                     <button
                       type="button"
                       onClick={handleWhatsApp}
-                      className="
-                        w-full rounded-full 
-                        bg-emerald-500 hover:bg-emerald-600 
-                        text-slate-950 text-[0.95rem] font-semibold 
-                        py-3.5 
-                        transition-all duration-200 
-                        shadow-md shadow-emerald-500/30
-                        active:scale-[0.98]
-                      "
+                      className="w-full rounded-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-[1rem] font-semibold py-3.5 transition-all duration-200 shadow-md shadow-emerald-500/30 active:scale-[0.98]"
                     >
                       M’envoyer ça sur WhatsApp
                     </button>
-                  </div>
+                  </motion.div>
                 )}
               </>
             )}
-
-            {/* Navigation bas : juste le lien retour */}
-            <div className="flex justify-between items-center mt-2 text-[0.8rem] text-text-muted">
-              <button
-                type="button"
-                disabled={step === 1}
-                onClick={() => {
-                  setShowWhatsAppCTA(false);
-                  setStep((s) => Math.max(1, s - 1));
-                }}
-                className="hover:text-slate-700 disabled:opacity-40 disabled:cursor-default"
-              >
-                ← Question précédente
-              </button>
-              {/* pas de texte à droite */}
-              <span />
-            </div>
           </div>
         </div>
       </div>
