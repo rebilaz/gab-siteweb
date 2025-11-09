@@ -146,8 +146,12 @@ function buildFilterPayload(filters: DashboardFilters) {
   };
 }
 
-export async function fetchOverview(filters: DashboardFilters) {
-  const supabase = getSupabaseServerClient();
+export async function fetchOverview(
+  filters: DashboardFilters,
+): Promise<DashboardOverview> {
+  // On relâche le typage sur supabase pour éviter les erreurs de Args: undefined
+  const supabase = getSupabaseServerClient() as any;
+
   const { data, error } = await supabase.rpc("dashboard_overview", {
     ...buildFilterPayload(filters),
   });
@@ -156,19 +160,37 @@ export async function fetchOverview(filters: DashboardFilters) {
     throw new Error(`dashboard_overview failed: ${error.message}`);
   }
 
-  if (!data?.length) {
+  // Typage local de la ligne renvoyée par la RPC
+  type DashboardOverviewRow = {
+    total_spend?: number | null;
+    total_revenue?: number | null;
+    total_purchases?: number | null;
+    total_impressions?: number | null;
+    total_clicks?: number | null;
+    video_views_3s?: number | null;
+    video_thruplays?: number | null;
+    avg_cpc?: number | null;
+    avg_cpm?: number | null;
+    avg_ctr?: number | null;
+    roas?: number | null;
+  };
+
+  const rows = (data ?? []) as DashboardOverviewRow[];
+
+  if (!rows.length) {
     return EMPTY_OVERVIEW;
   }
 
-  const row = data[0];
+  const row = rows[0];
+
   return {
-    totalSpend: Number(row.total_spend || 0),
-    totalRevenue: Number(row.total_revenue || 0),
-    totalPurchases: Number(row.total_purchases || 0),
-    totalImpressions: Number(row.total_impressions || 0),
-    totalClicks: Number(row.total_clicks || 0),
-    videoViews3s: Number(row.video_views_3s || 0),
-    videoThruplays: Number(row.video_thruplays || 0),
+    totalSpend: Number(row.total_spend ?? 0),
+    totalRevenue: Number(row.total_revenue ?? 0),
+    totalPurchases: Number(row.total_purchases ?? 0),
+    totalImpressions: Number(row.total_impressions ?? 0),
+    totalClicks: Number(row.total_clicks ?? 0),
+    videoViews3s: Number(row.video_views_3s ?? 0),
+    videoThruplays: Number(row.video_thruplays ?? 0),
     avgCpc: row.avg_cpc ?? null,
     avgCpm: row.avg_cpm ?? null,
     avgCtr: row.avg_ctr ?? null,
@@ -179,10 +201,17 @@ export async function fetchOverview(filters: DashboardFilters) {
 export async function fetchTopPosts(
   filters: DashboardFilters,
   limit = 10,
-  order: "roas" | "revenue" | "spend" | "impressions" | "clicks" | "thruplays" | "cost_per_thruplay" =
-    "roas",
+  order:
+    | "roas"
+    | "revenue"
+    | "spend"
+    | "impressions"
+    | "clicks"
+    | "thruplays"
+    | "cost_per_thruplay" = "roas",
 ) {
-  const supabase = getSupabaseServerClient();
+  const supabase = getSupabaseServerClient() as any;
+
   const { data, error } = await supabase.rpc("dashboard_top_posts", {
     ...buildFilterPayload(filters),
     p_limit: limit,
@@ -197,7 +226,8 @@ export async function fetchTopPosts(
 }
 
 export async function fetchTimeSeries(filters: DashboardFilters) {
-  const supabase = getSupabaseServerClient();
+  const supabase = getSupabaseServerClient() as any;
+
   const { data, error } = await supabase.rpc("dashboard_time_series", {
     ...buildFilterPayload(filters),
     p_granularity: "day",
@@ -207,7 +237,7 @@ export async function fetchTimeSeries(filters: DashboardFilters) {
     throw new Error(`dashboard_time_series failed: ${error.message}`);
   }
 
-  return (data ?? []).map((row) => ({
+  return (data ?? []).map((row: any) => ({
     ...row,
     bucket: row.bucket,
   })) as TimeSeriesPoint[];
@@ -218,7 +248,8 @@ export async function fetchPostDetail(filters: DashboardFilters) {
     return null;
   }
 
-  const supabase = getSupabaseServerClient();
+  const supabase = getSupabaseServerClient() as any;
+
   const { data, error } = await supabase.rpc("dashboard_post_detail", {
     p_post_id: filters.postId,
     p_start: filters.startDate,
@@ -229,11 +260,12 @@ export async function fetchPostDetail(filters: DashboardFilters) {
     throw new Error(`dashboard_post_detail failed: ${error.message}`);
   }
 
-  if (!data?.length) {
+  if (!data || !data.length) {
     return null;
   }
 
   const row = data[0] as PostDetail;
+
   return {
     ...row,
     ads: (row.ads ?? []) as PostDetail["ads"],
@@ -241,7 +273,8 @@ export async function fetchPostDetail(filters: DashboardFilters) {
 }
 
 export async function fetchFilterOptions(filters: DashboardFilters) {
-  const supabase = getSupabaseServerClient();
+  const supabase = getSupabaseServerClient() as any;
+
   const { data, error } = await supabase.rpc("dashboard_filter_options", {
     p_start: filters.startDate,
     p_end: filters.endDate,
@@ -251,7 +284,8 @@ export async function fetchFilterOptions(filters: DashboardFilters) {
     throw new Error(`dashboard_filter_options failed: ${error.message}`);
   }
 
-  const row = data?.[0] ?? {};
+  const row = (data && data[0]) || ({} as any);
+
   return {
     campaigns: (row.campaigns ?? []) as FilterOptions["campaigns"],
     adsets: (row.adsets ?? []) as FilterOptions["adsets"],
