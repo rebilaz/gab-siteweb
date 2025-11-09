@@ -41,8 +41,11 @@ const buildPath = (card: FloatingCardConfig) => {
 };
 
 export default function AutomationPreview({ className }: AutomationPreviewProps) {
+  const [mounted, setMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [flashIndex, setFlashIndex] = useState<number | null>(null);
+
+  useEffect(() => setMounted(true), []);
 
   // un flux lumineux aléatoire
   useEffect(() => {

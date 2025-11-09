@@ -12,6 +12,10 @@ const navLinks = [
 ];
 
 const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
+  // Guard pour éviter le mismatch SSR / client
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  // autres states
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [lastScroll, setLastScroll] = React.useState(0);
@@ -32,6 +36,9 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScroll, hidden]);
+
+  // Tant que ce n’est pas monté côté client, on ne rend rien
+  if (!mounted) return null;
 
   const handleScrollClick =
     (selector: string) =>
@@ -57,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
             "px-4 sm:px-6 py-2 sm:py-2.5",
           ].join(" ")}
         >
-          {/* Nom / marque */}
+          {/* Nom / marque : juste "Gabriel Collot" */}
           <button
             type="button"
             onClick={() => scrollTo("top")}
@@ -66,9 +73,6 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
             <div className="text-left leading-tight">
               <div className="font-semibold text-[1rem] text-slate-900 tracking-tight">
                 Gabriel Collot
-              </div>
-              <div className="text-[0.72rem] text-slate-500">
-                Automatisation & data
               </div>
             </div>
           </button>
@@ -132,9 +136,6 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
               <div className="text-left leading-tight">
                 <div className="font-semibold text-[1rem] text-slate-900">
                   Gabriel Collot
-                </div>
-                <div className="text-[0.72rem] text-slate-500">
-                  Automatisation & data
                 </div>
               </div>
 

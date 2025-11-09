@@ -10,17 +10,17 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    text: "On a enfin une vision claire de nos performances. En 2 semaines, on a optimisé nos campagnes et baissé notre CPA de 32%.",
+    text: "On a enfin un tableau de bord unique pour le chiffre d’affaires, les leads et le pipe. Toute l’équipe regarde les mêmes chiffres et on repère les blocages en quelques minutes.",
     name: "Julie Martin",
-    role: "CMO, Studio Nova",
+    role: "CEO, Studio Nova",
   },
   {
-    text: "Le reporting automatique nous fait gagner plusieurs heures par semaine. On peut se concentrer sur la stratégie, pas sur les exports.",
+    text: "Les relances, exports et mises à jour CRM sont automatisés. On a supprimé une grosse partie du travail manuel et des erreurs Excel. Je peux me concentrer sur la stratégie, pas sur l’opérationnel.",
     name: "Thomas Leroy",
-    role: "Growth Marketer, Bold SaaS",
+    role: "Responsable opérations, Bold SaaS",
   },
   {
-    text: "On a tout centralisé : Facebook Ads, Google Sheets et notre CRM. C’est devenu notre hub data pour piloter l’acquisition.",
+    text: "Nos outils parlent enfin entre eux : formulaires, CRM, facturation, suivi projets… Les automatisations tournent en arrière-plan et je reçois juste les alertes quand quelque chose bloque.",
     name: "Sarah Dupont",
     role: "Fondatrice, Maison Sélène",
   },
@@ -36,10 +36,10 @@ const TestimonialsSection: React.FC = () => {
         {/* Header minimal */}
         <div className="mx-auto mb-10 text-center">
           <span className="inline-flex items-center rounded-full border border-sky-500/40 bg-sky-900/30 px-3 py-1 text-xs font-medium uppercase tracking-wide text-sky-300">
-            Social Ads & Data
+            Systèmes & automatisations
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-slate-50">
-            Ce que disent nos clients
+            Ce que disent mes clients
           </h2>
         </div>
 

@@ -27,17 +27,19 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
         "
       />
 
-      {/* Halo mobile (optionnel, tu peux le garder ou l'ajuster) */}
+      {/* Halo mobile plus doux et sans délimitations */}
       <div
         className="
           pointer-events-none
           block md:hidden
-          absolute left-1/2 top-[62%]
+          absolute left-1/2 top-[60%]
           -translate-x-1/2
-          w-[140%] h-[140px]
-          bg-[radial-gradient(circle_at_center,#CFCFCF_0%,#E6E6E6_40%,rgba(255,255,255,0)_85%)]
+          w-[180%] h-[220px]
+          bg-[radial-gradient(circle_at_center,rgba(200,200,200,0.45)_0%,rgba(245,245,245,0.1)_40%,rgba(255,255,255,0)_85%)]
+          blur-[60px]
         "
       />
+
 
       {/* Texte */}
       <div
