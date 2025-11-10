@@ -1,9 +1,13 @@
-// src/lib/tracking.ts
 "use client";
 
 const TRACK_ENDPOINT =
-  process.env.NEXT_PUBLIC_TRACK_ENDPOINT ??
-  "https://<TON-PROJET>.functions.supabase.co/track-event"; // à remplacer
+  "https://jnkbqwqzatlrcpqwdlim.supabase.co/functions/v1/dynamic-handler";
+
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+console.log("[tracking.ts] Chargé ✅");
+console.log("[tracking.ts] TRACK_ENDPOINT =", TRACK_ENDPOINT);
+console.log("[tracking.ts] SUPABASE_ANON_KEY défini ? ", !!SUPABASE_ANON_KEY);
 
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
@@ -15,25 +19,22 @@ function getCookie(name: string): string | null {
   );
 }
 
-// ✅ version typée propre, plus d'erreur TS
 function getOrCreateSessionId(): string {
   if (typeof window === "undefined") return "";
 
   const KEY = "sess_id";
-
-  // on récupère ce qu'il y a en storage
   const existing = window.localStorage.getItem(KEY);
 
-  // s'il y en a déjà un, on le renvoie direct
   if (existing && existing.length > 0) {
+    console.log("[tracking] Session ID existant :", existing);
     return existing;
   }
 
-  // sinon on en génère un nouveau
   const generated =
     (crypto as any)?.randomUUID?.() ??
     `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+  console.log("[tracking] Nouveau Session ID généré :", generated);
   window.localStorage.setItem(KEY, generated);
 
   return generated;
@@ -44,7 +45,7 @@ function getUtmAndCampaignParams() {
   const url = new URL(window.location.href);
   const get = (k: string) => url.searchParams.get(k) || undefined;
 
-  return {
+  const utm = {
     utm_source: get("utm_source"),
     utm_medium: get("utm_medium"),
     utm_campaign: get("utm_campaign"),
@@ -55,11 +56,14 @@ function getUtmAndCampaignParams() {
     ad_id: get("ad_id"),
     fbclid: get("fbclid"),
   };
+
+  console.log("[tracking] UTM détectés :", utm);
+  return utm;
 }
 
 export type ExtraTrackingData = {
   scroll_pct?: number | null;
-  source?: string; // ex: "approach_cta", "contact_quiz"
+  source?: string;
 };
 
 export async function trackEvent(
@@ -67,7 +71,10 @@ export async function trackEvent(
   value: number,
   extra: ExtraTrackingData = {},
 ) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    console.warn("[trackEvent] Ignoré (pas de window)");
+    return;
+  }
 
   try {
     const url = window.location.href;
@@ -88,44 +95,68 @@ export async function trackEvent(
       source: extra.source ?? undefined,
     };
 
-    // fire & forget
+    console.log(`[trackEvent] Envoi de l’event "${event_name}"`, body);
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (SUPABASE_ANON_KEY) {
+      headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
+    } else {
+      console.warn(
+        "[trackEvent] NEXT_PUBLIC_SUPABASE_ANON_KEY manquant, la fonction peut répondre 401",
+      );
+    }
+
     fetch(TRACK_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(body),
       keepalive: true,
-    }).catch(() => {});
+    })
+      .then((res) => {
+        console.log(`[trackEvent] Réponse (${res.status})`, res);
+        return res.text();
+      })
+      .then((txt) => {
+        console.log("[trackEvent] Contenu de la réponse :", txt);
+      })
+      .catch((err) => {
+        console.error("[trackEvent] Erreur lors du fetch :", err);
+      });
   } catch (e) {
-    console.error("trackEvent error", e);
+    console.error("[trackEvent] Exception :", e);
   }
 }
 
-/**
- * À appeler une seule fois sur la page :
- * - PageView (value 1)
- * - PageView "fort" (value 3) si scroll >= 50% ou 10s sur la page
- */
 let pageTrackingInit = false;
 export function setupPageTracking() {
-  if (pageTrackingInit || typeof window === "undefined") return;
+  if (pageTrackingInit || typeof window === "undefined") {
+    console.warn("[setupPageTracking] déjà initialisé ou hors navigateur");
+    return;
+  }
   pageTrackingInit = true;
 
-  // 1️⃣ PageView simple
+  console.log("[setupPageTracking] Initialisation du tracking de page ✅");
+
   trackEvent("PageView", 1);
 
-  // 2️⃣ PageView fort (scroll 50% ou 10s)
   let strongSent = false;
 
   const sendStrong = (scroll_pct: number | null) => {
     if (strongSent) return;
     strongSent = true;
+    console.log(
+      "[setupPageTracking] Envoi de PageView fort (scroll_pct:",
+      scroll_pct,
+      ")",
+    );
     trackEvent("PageView", 3, { scroll_pct });
   };
 
-  // 10 secondes
   setTimeout(() => sendStrong(null), 10_000);
 
-  // scroll >= 50%
   window.addEventListener("scroll", () => {
     const scrollPercent =
       ((window.scrollY + window.innerHeight) / document.body.scrollHeight) *

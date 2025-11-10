@@ -14,17 +14,23 @@ const LandingPage: React.FC = () => {
   const year = new Date().getFullYear();
 
   useEffect(() => {
+    console.log("[LandingPage] useEffect -> setupPageTracking()");
     setupPageTracking();
   }, []);
 
   const scrollToSelector = (selector: string) => {
+    console.log("[LandingPage] scrollToSelector", selector);
+
     const offset = 72;
     const el =
       selector === "top"
         ? document.body
         : (document.querySelector(selector) as HTMLElement | null);
 
-    if (!el) return;
+    if (!el) {
+      console.warn("[LandingPage] Élément introuvable pour le sélecteur", selector);
+      return;
+    }
 
     const top =
       selector === "top"
@@ -35,7 +41,9 @@ const LandingPage: React.FC = () => {
   };
 
   const handleFormSubmit = (data: FormData) => {
-    console.log("Form data:", Object.fromEntries(data.entries()));
+    const obj = Object.fromEntries(data.entries());
+    console.log("[LandingPage] Form submit :", obj);
+    // plus tard tu pourras faire: trackEvent("Lead", 1, { source: "contact_form" })
   };
 
   return (
