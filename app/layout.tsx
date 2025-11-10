@@ -15,10 +15,26 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
+      <head>
+        {/* 🟢 Google Analytics */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-8757G6LMGB"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8757G6LMGB');
+          `}
+        </Script>
+      </head>
+
       <body>
         {children}
 
-        {/* 🔥 Script Meta Pixel */}
+        {/* 🔵 Meta Pixel (Facebook) */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
