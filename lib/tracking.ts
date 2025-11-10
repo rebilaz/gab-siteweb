@@ -54,6 +54,7 @@ function getUtmAndCampaignParams() {
     campaign_id: get("campaign_id"),
     adset_id: get("adset_id"),
     ad_id: get("ad_id"),
+    post_id: get("post_id"),
     fbclid: get("fbclid"),
   };
 
