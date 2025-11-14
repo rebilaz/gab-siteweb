@@ -97,12 +97,7 @@ export async function trackEvent(
   const fbc = getCookie("_fbc");
   const fbp = getCookie("_fbp");
   console.log("🔍 [trackEvent] fbc =", fbc, "fbp =", fbp);
-
-  if (!fbc) {
-    console.warn(`⛔ [trackEvent] Annulé : "_fbc" manquant pour "${event_name}"`);
-    return;
-  }
-
+  
   try {
     const url = window.location.href;
     const referrer = document.referrer || null;
