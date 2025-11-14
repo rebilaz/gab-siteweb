@@ -1,5 +1,12 @@
 "use client";
 
+declare global {
+  interface Window {
+    __lastEventId?: string;
+  }
+}
+
+
 const TRACK_ENDPOINT =
   "https://jnkbqwqzatlrcpqwdlim.supabase.co/functions/v1/dynamic-handler";
 
@@ -8,6 +15,12 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 console.log("📄 [tracking.ts] Chargé");
 console.log("🔗 [tracking.ts] TRACK_ENDPOINT =", TRACK_ENDPOINT);
 console.log("🔑 [tracking.ts] SUPABASE_ANON_KEY défini ? ", !!SUPABASE_ANON_KEY);
+
+// --- Génération d'un event_id partagé Pixel + CAPI ---
+function generateEventId(): string {
+  return (crypto as any)?.randomUUID?.() ??
+    `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
 
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
@@ -96,9 +109,14 @@ export async function trackEvent(
     const session_id = getOrCreateSessionId();
     const utm = getUtmAndCampaignParams();
 
+    // --- Génération d'un event_id pour Pixel + CAPI ---
+    const event_id = generateEventId();
+    window.__lastEventId = event_id;  // 👈 Pixel utilise ça
+
     const body = {
       event_name,
       value,
+      event_id,               // 👈 Envoi au backend
       url,
       referrer,
       scroll_pct: extra.scroll_pct ?? null,
