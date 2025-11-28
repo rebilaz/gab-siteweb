@@ -27,7 +27,9 @@ const config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography"), // ⬅️ OBLIGATOIRE POUR `prose`
+  ],
 };
 
 export default config;
