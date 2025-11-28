@@ -27,6 +27,13 @@ export default function RootLayout({
           `}
         </Script>
         {/* 🔴 Ancienne balise GA4 supprimée : GA4 sera géré dans GTM */}
+        
+        {/* ⭐ Favicon */}
+        <link
+          rel="icon"
+          href="/vexly-logo-2-symbol.svg"
+          type="image/svg+xml"
+        />
       </head>
 
       <body>

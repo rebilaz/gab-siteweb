@@ -1,27 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+// lib/supabaseClient.ts
+"use client";
 
-let singletonClient: ReturnType<typeof createClient> | null = null;
+import { createBrowserClient } from "@supabase/ssr";
 
-export function getSupabaseServerClient() {
-  if (singletonClient) {
-    return singletonClient;
-  }
-
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !anonKey) {
-    throw new Error(
-      "Missing Supabase environment variables. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
-    );
-  }
-
-  singletonClient = createClient(url, anonKey, {
-    auth: {
-      persistSession: false,
-      detectSessionInUrl: false,
-    },
-  });
-
-  return singletonClient;
-}
+export const supabaseClient = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);

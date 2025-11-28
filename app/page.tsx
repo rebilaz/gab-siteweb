@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Header from "@/components/Header";
+import Header  from "@/components/Header"; // 👈 on importe LandingHeader
 import Hero from "@/components/sections/Hero";
 import Approach from "@/components/sections/Approach";
 import TestimonialsSection from "@/components/sections/Testimonials";
@@ -28,7 +28,10 @@ const LandingPage: React.FC = () => {
         : (document.querySelector(selector) as HTMLElement | null);
 
     if (!el) {
-      console.warn("[LandingPage] Élément introuvable pour le sélecteur", selector);
+      console.warn(
+        "[LandingPage] Élément introuvable pour le sélecteur",
+        selector
+      );
       return;
     }
 
@@ -48,14 +51,18 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900">
-      <Header scrollTo={scrollToSelector} />
+      {/* 👉 Utilise le bon nom de composant : LandingHeader */}
+      <Header niche="SaaS Builder" />
+
       <main className="flex-1">
         <Hero scrollTo={scrollToSelector} />
         <Approach />
         <TestimonialsSection />
         <Contact onSubmit={handleFormSubmit} />
       </main>
-      <Footer year={year} scrollTo={scrollToSelector} />
+
+      {/* 👉 Footer ne reçoit plus scrollTo car FooterProps ne le prévoit pas */}
+      <Footer year={year} />
     </div>
   );
 };
