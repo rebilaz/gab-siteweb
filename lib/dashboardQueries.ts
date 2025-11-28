@@ -1,4 +1,5 @@
-import { getSupabaseServerClient } from "@/lib/supabaseClient";
+import { createSupabaseServer } from "@/lib/supabase/server";
+
 
 export type DashboardFilters = {
   startDate: string;
@@ -150,7 +151,7 @@ export async function fetchOverview(
   filters: DashboardFilters,
 ): Promise<DashboardOverview> {
   // On relâche le typage sur supabase pour éviter les erreurs de Args: undefined
-  const supabase = getSupabaseServerClient() as any;
+  const supabase = createSupabaseServer() as any;
 
   const { data, error } = await supabase.rpc("dashboard_overview", {
     ...buildFilterPayload(filters),
@@ -210,7 +211,7 @@ export async function fetchTopPosts(
     | "thruplays"
     | "cost_per_thruplay" = "roas",
 ) {
-  const supabase = getSupabaseServerClient() as any;
+  const supabase = createSupabaseServer() as any;
 
   const { data, error } = await supabase.rpc("dashboard_top_posts", {
     ...buildFilterPayload(filters),
@@ -226,7 +227,7 @@ export async function fetchTopPosts(
 }
 
 export async function fetchTimeSeries(filters: DashboardFilters) {
-  const supabase = getSupabaseServerClient() as any;
+  const supabase = createSupabaseServer() as any;
 
   const { data, error } = await supabase.rpc("dashboard_time_series", {
     ...buildFilterPayload(filters),
@@ -248,7 +249,7 @@ export async function fetchPostDetail(filters: DashboardFilters) {
     return null;
   }
 
-  const supabase = getSupabaseServerClient() as any;
+  const supabase = createSupabaseServer() as any;
 
   const { data, error } = await supabase.rpc("dashboard_post_detail", {
     p_post_id: filters.postId,
@@ -273,7 +274,7 @@ export async function fetchPostDetail(filters: DashboardFilters) {
 }
 
 export async function fetchFilterOptions(filters: DashboardFilters) {
-  const supabase = getSupabaseServerClient() as any;
+  const supabase = createSupabaseServer() as any;
 
   const { data, error } = await supabase.rpc("dashboard_filter_options", {
     p_start: filters.startDate,
