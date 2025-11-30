@@ -1,6 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Systèmes & Dashboards",
@@ -16,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
-        {/* 🟣 Google Tag Manager */}
+        {/* GTM */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -26,9 +29,7 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-KN4N4JCC');
           `}
         </Script>
-        {/* 🔴 Ancienne balise GA4 supprimée : GA4 sera géré dans GTM */}
-        
-        {/* ⭐ Favicon */}
+
         <link
           rel="icon"
           href="/vexly-logo-2-symbol.svg"
@@ -36,20 +37,29 @@ export default function RootLayout({
         />
       </head>
 
-      <body>
-        {/* 🟣 Google Tag Manager (noscript) */}
+      <body className="min-h-screen bg-white text-slate-900">
+        {/* GTM noscript */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KN4N4JCC"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
+          />
         </noscript>
 
-        {children}
+        {/* WRAPPER EN FLEX */}
+        <div className="flex min-h-screen flex-col">
+          <Header />
 
-        {/* 🔵 Meta Pixel (Facebook) */}
+          <main className="flex-1">
+            {children}
+          </main>
+
+          <Footer />
+        </div>
+
+        {/* Meta Pixel */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
@@ -65,7 +75,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* 🧩 Fallback pour les utilisateurs sans JS */}
         <noscript>
           <img
             height="1"

@@ -3,8 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-
-import Header from "@/components/Header";
 import { ArticleCTA } from "@/components/articles/ArticleCTA";
 import {
   ArticleProgressBar,
@@ -106,8 +104,6 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      <Header niche={niche ?? "Article"} />
-
       {/* Header interne */}
       <header className="mt-2 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 lg:px-8 py-3">

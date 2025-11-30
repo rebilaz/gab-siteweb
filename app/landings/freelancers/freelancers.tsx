@@ -1,4 +1,4 @@
-import { LandingLayout } from "@/components/LandingLayout";
+import { LandingLayout } from "@/components/landing/LandingLayout";
 
 export default function EntrepreneursPage() {
   return (

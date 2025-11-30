@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { LandingLayout } from "@/components/LandingLayout";
+import  LandingLayout  from "@/components/landing/LandingLayout";
 import TestimonialsSection from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import { setupPageTracking } from "@/lib/tracking";
@@ -78,17 +78,6 @@ const LandingPage: React.FC = () => {
         sections={sections}
         onPrimaryCtaClick={handlePrimaryCtaClick}
       />
-
-      {/* Optionnel : tu gardes tes sections existantes en dessous du layout */}
-      <section className="bg-white border-t border-slate-200">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 space-y-16">
-          <TestimonialsSection />
-
-          <div id="contact">
-            <Contact onSubmit={handleFormSubmit} />
-          </div>
-        </div>
-      </section>
     </>
   );
 };
