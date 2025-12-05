@@ -2,9 +2,9 @@
 "use client";
 
 import React, { useEffect } from "react";
-import  LandingLayout  from "@/components/landing/LandingLayout";
-import TestimonialsSection from "@/components/sections/Testimonials";
-import Contact from "@/components/sections/Contact";
+import LandingLayout, {
+  LandingSection,
+} from "@/components/landing/LandingLayout";
 import { setupPageTracking } from "@/lib/tracking";
 
 const LandingPage: React.FC = () => {
@@ -34,7 +34,7 @@ const LandingPage: React.FC = () => {
   };
 
   // 👉 Contenu des blocs de texte du LandingLayout
-  const sections = [
+  const sections: LandingSection[] = [
     {
       id: "systems",
       title: "Des systèmes qui travaillent pour toi",
@@ -69,7 +69,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      {/* 🧱 Nouveau layout principal */}
       <LandingLayout
         niche="SaaS Builder"
         heroTitle="Systèmes & dashboards pour piloter ton business simplement"
@@ -78,6 +77,11 @@ const LandingPage: React.FC = () => {
         sections={sections}
         onPrimaryCtaClick={handlePrimaryCtaClick}
       />
+      {/* Quand ton composant Contact sera prêt avec un id="contact",
+          tu pourras le rendre ici et utiliser handleFormSubmit : */}
+      {/*
+      <Contact onSubmit={handleFormSubmit} />
+      */}
     </>
   );
 };

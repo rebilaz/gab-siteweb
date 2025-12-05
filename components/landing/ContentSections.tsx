@@ -32,7 +32,7 @@ const ContentSections: React.FC<ContentSectionsProps> = ({ sections }) => {
 
           {section.bullets && section.bullets.length > 0 && (
             <ul className="mt-5 space-y-2 text-sm text-slate-700">
-              {section.bullets.map((item, i) => (
+              {section.bullets.map((item: string, i: number) => (
                 <li key={i} className="flex gap-2">
                   <span className="mt-[6px] inline-block h-[6px] w-[6px] flex-shrink-0 rounded-full bg-indigo-500" />
                   <span>{item}</span>

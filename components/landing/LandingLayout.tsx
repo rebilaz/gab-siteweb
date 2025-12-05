@@ -6,6 +6,7 @@ import FeaturesSection from "./FeaturesSection";
 import ContentSections from "./ContentSections";
 import FinalCTASection from "./FinalCTASection";
 
+// 🔹 Type exporté pour ContentSections
 export type LandingSection = {
   id?: string;
   title: string;
