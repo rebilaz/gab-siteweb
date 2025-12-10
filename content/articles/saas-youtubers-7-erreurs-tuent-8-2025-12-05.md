@@ -103,7 +103,7 @@ Résultat : tu perds du temps, tu ne l’utilises pas vraiment, et tu repousses 
 
 ### Le problème : confondre “usine à gaz” et “solution complète”
 
-Un bon [SaaS pour YouTubers](/articles/saas-youtubers-syste-me-transformer) (qu’il soit existant ou sur mesure) doit être :
+Un bon [SaaS pour YouTubers](/articles/saas-youtubers-mode-exact-passer) (qu’il soit existant ou sur mesure) doit être :
 
 - **Spécifique** à ton usage (YouTube, vidéo, communauté)
 - **Compréhensible** en quelques minutes
