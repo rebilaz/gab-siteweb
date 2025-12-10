@@ -38,7 +38,7 @@ Un SaaS bien pensé peut :
 
 Ce guide est là pour éviter ça.
 
-On va voir les **7 erreurs qui tuent les revenus des [[[[[SaaS pour YouTubers](/articles/saas-youtubers-roadmap-comple-te)](/articles/saas-youtubers-l-effet-levier)](/articles/saas-youtubers-playbook-transformer-ton)](/articles/saas-youtubers-mode-exact-passer)](/articles/saas-youtubers-syste-me-transformer)**, comment les éviter **sans coder**, et comment t’appuyer sur les bons outils ou sur un prestataire *done-for-you* pour aller au bout de ton idée sereinement.
+On va voir les **7 erreurs qui tuent les revenus des [[[[[SaaS pour YouTubers](/articles/saas-youtubers-syste-me-transformer)](/articles/saas-youtubers-roadmap-comple-te)](/articles/saas-youtubers-mode-exact-passer)](/articles/saas-youtubers-plan-cashflow-mone)](/articles/saas-youtubers-playbook-transformer-ton)**, comment les éviter **sans coder**, et comment t’appuyer sur les bons outils ou sur un prestataire *done-for-you* pour aller au bout de ton idée sereinement.
 
 ---
 
