@@ -1,10 +1,12 @@
+// components/landing/LandingLayout.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
 import ContentSections from "./ContentSections";
 import FinalCTASection from "./FinalCTASection";
+import { setupPageTracking } from "@/lib/tracking";
 
 // 🔹 Type exporté pour ContentSections
 export type LandingSection = {
@@ -20,7 +22,6 @@ type LandingLayoutProps = {
   heroSubtitle: string;
   primaryCtaLabel: string;
   sections: LandingSection[];
-  onPrimaryCtaClick?: () => void;
 };
 
 const LandingLayout: React.FC<LandingLayoutProps> = ({
@@ -29,8 +30,27 @@ const LandingLayout: React.FC<LandingLayoutProps> = ({
   heroSubtitle,
   primaryCtaLabel,
   sections,
-  onPrimaryCtaClick,
 }) => {
+  // Tracking page
+  useEffect(() => {
+    console.log("[LandingLayout] setupPageTracking()");
+    setupPageTracking();
+  }, []);
+
+  // Scroll vers la section #contact quand on clique sur le CTA
+  const handlePrimaryCtaClick = useCallback(() => {
+    const offset = 72;
+    const el = document.querySelector("#contact") as HTMLElement | null;
+
+    if (!el) {
+      console.warn("[LandingLayout] Élément #contact introuvable");
+      return;
+    }
+
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       <main className="mx-auto max-w-7xl px-6 lg:px-8 py-16 space-y-28 lg:space-y-32">
@@ -39,7 +59,7 @@ const LandingLayout: React.FC<LandingLayoutProps> = ({
           heroTitle={heroTitle}
           heroSubtitle={heroSubtitle}
           primaryCtaLabel={primaryCtaLabel}
-          onPrimaryCtaClick={onPrimaryCtaClick}
+          onPrimaryCtaClick={handlePrimaryCtaClick}
         />
 
         <FeaturesSection />
@@ -49,7 +69,7 @@ const LandingLayout: React.FC<LandingLayoutProps> = ({
         <FinalCTASection
           niche={niche}
           primaryCtaLabel={primaryCtaLabel}
-          onPrimaryCtaClick={onPrimaryCtaClick}
+          onPrimaryCtaClick={handlePrimaryCtaClick}
         />
       </main>
     </div>
