@@ -1,5 +1,6 @@
+// app/articles/page.tsx
 import { getAllArticles } from "@/lib/articles";
-import ArticlesIndexClient from "@/components/articles/ArticlesIndexClient";
+import ArticlesIndexClient from "@/components/ressources/articles/ArticlesIndexClient";
 
 export const revalidate = 1800;
 

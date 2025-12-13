@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { GeistSans } from "geist/font/sans";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -37,7 +38,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="min-h-screen bg-white text-slate-900">
+      <body className={`${GeistSans.variable} font-sans min-h-screen bg-white text-slate-900`}>
         {/* GTM noscript */}
         <noscript>
           <iframe

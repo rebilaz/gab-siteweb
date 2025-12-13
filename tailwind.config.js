@@ -6,6 +6,12 @@ const config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // ✅ Utilisable via `font-sans` partout
+        sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui"],
+        // (optionnel) mono si tu ajoutes GeistMono plus tard
+        mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular"],
+      },
       colors: {
         bg: "#f5f5f7",
         "bg-card": "#ffffff",
@@ -27,9 +33,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require("@tailwindcss/typography"), // ⬅️ OBLIGATOIRE POUR `prose`
-  ],
+  plugins: [require("@tailwindcss/typography")],
 };
 
 export default config;
