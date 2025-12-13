@@ -14,6 +14,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.vexly.fr/ressources</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/parcours</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.vexly.fr/articles/7-erreurs-validation-d-ide-2025-12-13</loc>
     <lastmod>2025-12-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -22,6 +32,54 @@
   <url>
     <loc>https://www.vexly.fr/articles/6-crite-res-savoir-si-2025-12-12</loc>
     <lastmod>2025-12-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/saas-youtubeurs-comment-fixer-bon-2025-12-11</loc>
+    <lastmod>2025-12-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/micro-saas-rentable-comment-valider-2025-12-10</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/micro-saas-rentable-checklist-anti-2025-12-09</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/saas-youtubeurs-comment-transformer-ton-3-2025-12-04</loc>
+    <lastmod>2025-12-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/choisir-prestataire-saas-2025-12-02</loc>
+    <lastmod>2025-12-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/deleguer-idee-saas-2025-12-01</loc>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/micro-saas-no-code-ia-2025-11-30</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vexly.fr/articles/deleguer-saas-rentable-2025-11-30</loc>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
