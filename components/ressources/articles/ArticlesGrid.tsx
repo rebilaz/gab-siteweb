@@ -109,12 +109,13 @@ function ArticleCard({ article }: { article: EnrichedArticle }) {
 export default function ArticlesGrid({
   articles,
   showLatest = false,
-  query,
+  query = "",
+  onClearQuery,
 }: {
   articles: EnrichedArticle[];
   showLatest?: boolean;
-  query: string;
-  selectedCluster: string; // gardé pour compat (pas utilisé)
+  query?: string;
+  onClearQuery?: () => void;
 }) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -133,22 +134,27 @@ export default function ArticlesGrid({
     });
   };
 
-  if (articles.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="rounded-full bg-slate-50 p-4 mb-4">
-          <Search className="h-8 w-8 text-slate-300" />
-        </div>
-        <h3 className="text-lg font-semibold text-slate-900">Aucun résultat</h3>
-        <p className="text-slate-500">Essayez de reformuler votre recherche.</p>
-        {!!query && (
-          <a href="/articles" className="mt-4 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-            Revenir à la liste
-          </a>
-        )}
+if (articles.length === 0) {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="rounded-full bg-slate-50 p-4 mb-4">
+        <Search className="h-8 w-8 text-slate-300" />
       </div>
-    );
-  }
+      <h3 className="text-lg font-semibold text-slate-900">Aucun résultat</h3>
+      <p className="text-slate-500">Essayez de reformuler votre recherche.</p>
+
+      {!!query && onClearQuery && (
+        <button
+          onClick={onClearQuery}
+          className="mt-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+        >
+          Effacer la recherche
+        </button>
+      )}
+    </div>
+  );
+}
+
 
   return (
     <>
