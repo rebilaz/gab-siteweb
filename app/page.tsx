@@ -1,17 +1,13 @@
 // app/page.tsx
-
 import type { Metadata } from "next";
-import LandingLayout, {
-  LandingSection,
-} from "@/components/landing/LandingLayout";
+import LandingLayout, { LandingSection } from "@/components/landing/LandingLayout";
 
-// ✅ Balises SEO + canonical pour la home
 export const metadata: Metadata = {
   title: "Vexly – Systèmes, automatisations et dashboards pour ton business",
   description:
     "Je connecte tes outils, j’automatise tes process et je crée des dashboards pour que tu pilotes ton activité sans te perdre dans la technique.",
   alternates: {
-    canonical: "https://www.vexly.fr/",
+    canonical: "/", // ✅ au lieu de "https://www.vexly.fr/"
   },
 };
 

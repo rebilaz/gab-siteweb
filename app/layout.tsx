@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.vexly.fr"), // ⭐ ESSENTIEL pour canonical
   title: "Systèmes & Dashboards",
   description:
     "Je connecte tes outils, j’automatise tes process et je crée des dashboards pour piloter ton entreprise simplement.",
@@ -21,7 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -29,8 +29,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <head>
-        {/* GTM */}
+      <body
+        className={`${GeistSans.variable} font-sans min-h-screen bg-white text-slate-900`}
+      >
+        {/* ✅ Google Tag Manager */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -41,14 +43,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        <link
-          rel="icon"
-          href="/vexly-logo-2-symbol.svg"
-          type="image/svg+xml"
-        />
-      </head>
-
-      <body className={`${GeistSans.variable} font-sans min-h-screen bg-white text-slate-900`}>
         {/* GTM noscript */}
         <noscript>
           <iframe
@@ -59,30 +53,27 @@ export default function RootLayout({
           />
         </noscript>
 
-        {/* WRAPPER EN FLEX */}
+        {/* WRAPPER */}
         <div className="flex min-h-screen flex-col">
           <Header />
 
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
 
           <Footer />
         </div>
 
-        {/* Meta Pixel */}
+        {/* ✅ Meta Pixel */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);
+            t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${process.env.META_PIXEL_ID}');
-            fbq('track', 'PageView', {}, { eventID: window.__lastEventId });
+            fbq('track', 'PageView');
           `}
         </Script>
 

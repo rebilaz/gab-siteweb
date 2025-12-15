@@ -4,7 +4,7 @@ import PricingClient from "@/components/pricing/PricingClient";
 export const metadata: Metadata = {
   title: "Tarifs – Vexly",
   description: "Tarifs pour lancer ton SaaS clé en main : Starter, Growth ou Custom.",
-  alternates: { canonical: "https://www.vexly.fr/tarifs" },
+  alternates: { canonical: "/tarifs" },
 };
 
 export default function PricingPage() {

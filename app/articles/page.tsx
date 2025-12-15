@@ -8,7 +8,7 @@ export const metadata = {
   title: "Articles – Vexly",
   description: "Tous les articles SaaS, automatisation, IA et business.",
   alternates: {
-    canonical: "https://www.vexly.fr/articles",
+    canonical: "/articles",
   },
 };
 
