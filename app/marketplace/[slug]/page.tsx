@@ -4,11 +4,11 @@ import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
 import { getListing, getAllListingSlugs } from "@/lib/marketplace";
 
-import { Image as SaaSImage } from "@/components/marketplace/Images";
-import { ListingHeader } from "@/components/marketplace/ListingHeader";
-import { TrafficChart } from "@/components/marketplace/TrafficChart";
-import { CheckoutCard } from "@/components/marketplace/CheckoutCard";
-import { TechStack } from "@/components/marketplace/TechStack";
+import { Image as SaaSImage } from "@/components/marketplace/product page/Images";
+import { ListingHeader } from "@/components/marketplace/product page/ListingHeader";
+import { TrafficChart } from "@/components/marketplace/product page/TrafficChart";
+import { CheckoutCard } from "@/components/marketplace/product page/CheckoutCard";
+import { TechStack } from "@/components/marketplace/product page/TechStack";
 
 export async function generateStaticParams() {
   const listings = getAllListingSlugs();

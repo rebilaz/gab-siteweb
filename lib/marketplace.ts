@@ -23,6 +23,7 @@ export type Listing = {
 
   // Header
   name: string;
+  tagline?: string; // ✅ AJOUT (fix ts2339)
   niche_category?: string;
   discovered_at?: string;
 
@@ -49,6 +50,27 @@ export type Listing = {
 };
 
 /* =========================
+   SMALL GUARDS
+========================= */
+
+function isStringArray(v: unknown): v is string[] {
+  return Array.isArray(v) && v.every((x) => typeof x === "string");
+}
+
+function isTrafficPointArray(v: unknown): v is TrafficPoint[] {
+  return (
+    Array.isArray(v) &&
+    v.every(
+      (x) =>
+        x &&
+        typeof x === "object" &&
+        typeof (x as any).label === "string" &&
+        typeof (x as any).value === "number"
+    )
+  );
+}
+
+/* =========================
    HELPERS
 ========================= */
 
@@ -70,42 +92,45 @@ export function getListing(slug: string): Listing | null {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  // Sécurisation minimale + mapping clair
+  // Mapping "safe" (data est typé any côté gray-matter)
   const listing: Listing = {
     slug,
 
-    name: data.name ?? slug,
-    niche_category: data.niche_category,
-    discovered_at: data.discovered_at,
+    name: typeof data?.name === "string" ? data.name : slug,
+    tagline: typeof data?.tagline === "string" ? data.tagline : undefined, // ✅ AJOUT
 
-    url: data.url,
-    demo_url: data.demo_url,
+    niche_category:
+      typeof data?.niche_category === "string" ? data.niche_category : undefined,
+    discovered_at:
+      typeof data?.discovered_at === "string" ? data.discovered_at : undefined,
 
-    image: data.image,
+    url: typeof data?.url === "string" ? data.url : undefined,
+    demo_url: typeof data?.demo_url === "string" ? data.demo_url : undefined,
 
-    content: content.trim(),
+    image: typeof data?.image === "string" ? data.image : undefined,
 
-    mvp_features: Array.isArray(data.mvp_features)
-      ? data.mvp_features
-      : undefined,
+    content: (content ?? "").trim(),
 
-    stack_guess: Array.isArray(data.stack_guess)
-      ? data.stack_guess
-      : undefined,
+    mvp_features: isStringArray(data?.mvp_features) ? data.mvp_features : undefined,
 
-    monthly_visits: Array.isArray(data.monthly_visits)
+    stack_guess: isStringArray(data?.stack_guess) ? data.stack_guess : undefined,
+
+    monthly_visits: isTrafficPointArray(data?.monthly_visits)
       ? data.monthly_visits
       : undefined,
 
-    growth_rate:
-      typeof data.growth_rate === "number"
-        ? data.growth_rate
-        : undefined,
+    growth_rate: typeof data?.growth_rate === "number" ? data.growth_rate : undefined,
 
-    vexly_analysis: data.vexly_analysis
+    vexly_analysis: data?.vexly_analysis
       ? {
-          estimated_price: data.vexly_analysis.estimated_price,
-          comment: data.vexly_analysis.comment,
+          estimated_price:
+            typeof data.vexly_analysis?.estimated_price === "string"
+              ? data.vexly_analysis.estimated_price
+              : undefined,
+          comment:
+            typeof data.vexly_analysis?.comment === "string"
+              ? data.vexly_analysis.comment
+              : undefined,
         }
       : undefined,
   };
