@@ -23,13 +23,18 @@ export type Listing = {
 
   // Header
   name: string;
-  tagline?: string; // ✅ AJOUT (fix ts2339)
+  tagline?: string;
   niche_category?: string;
   discovered_at?: string;
 
   // URLs
   url?: string;
   demo_url?: string;
+
+  // SEO / SaaS proof (optionnel)
+  pricing_url?: string;
+  login_url?: string;
+  proof_of_saas?: string;
 
   // Media
   image?: string;
@@ -92,33 +97,30 @@ export function getListing(slug: string): Listing | null {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  // Mapping "safe" (data est typé any côté gray-matter)
   const listing: Listing = {
     slug,
 
     name: typeof data?.name === "string" ? data.name : slug,
-    tagline: typeof data?.tagline === "string" ? data.tagline : undefined, // ✅ AJOUT
+    tagline: typeof data?.tagline === "string" ? data.tagline : undefined,
 
-    niche_category:
-      typeof data?.niche_category === "string" ? data.niche_category : undefined,
-    discovered_at:
-      typeof data?.discovered_at === "string" ? data.discovered_at : undefined,
+    niche_category: typeof data?.niche_category === "string" ? data.niche_category : undefined,
+    discovered_at: typeof data?.discovered_at === "string" ? data.discovered_at : undefined,
 
     url: typeof data?.url === "string" ? data.url : undefined,
     demo_url: typeof data?.demo_url === "string" ? data.demo_url : undefined,
+
+    pricing_url: typeof data?.pricing_url === "string" ? data.pricing_url : undefined,
+    login_url: typeof data?.login_url === "string" ? data.login_url : undefined,
+    proof_of_saas: typeof data?.proof_of_saas === "string" ? data.proof_of_saas : undefined,
 
     image: typeof data?.image === "string" ? data.image : undefined,
 
     content: (content ?? "").trim(),
 
     mvp_features: isStringArray(data?.mvp_features) ? data.mvp_features : undefined,
-
     stack_guess: isStringArray(data?.stack_guess) ? data.stack_guess : undefined,
 
-    monthly_visits: isTrafficPointArray(data?.monthly_visits)
-      ? data.monthly_visits
-      : undefined,
-
+    monthly_visits: isTrafficPointArray(data?.monthly_visits) ? data.monthly_visits : undefined,
     growth_rate: typeof data?.growth_rate === "number" ? data.growth_rate : undefined,
 
     vexly_analysis: data?.vexly_analysis
@@ -128,12 +130,20 @@ export function getListing(slug: string): Listing | null {
               ? data.vexly_analysis.estimated_price
               : undefined,
           comment:
-            typeof data.vexly_analysis?.comment === "string"
-              ? data.vexly_analysis.comment
-              : undefined,
+            typeof data.vexly_analysis?.comment === "string" ? data.vexly_analysis.comment : undefined,
         }
       : undefined,
   };
 
   return listing;
+}
+
+/**
+ * ✅ Utile pour “Produits similaires”, “Alternatives”, etc.
+ */
+export function getAllListings(): Listing[] {
+  const slugs = getAllListingSlugs();
+  return slugs
+    .map(({ slug }) => getListing(slug))
+    .filter(Boolean) as Listing[];
 }
